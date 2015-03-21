@@ -45,7 +45,7 @@ var http = require('http')
 			};
 
 		if(typeof item._id !== 'undefined'){
-			options.path = options.path + '/' + idIn;
+			options.path = options.path + '/' + item._id;
 			options.method = 'PUT';
 		}
 		
@@ -55,10 +55,10 @@ var http = require('http')
 	, setup = function (keyIn, tokenIn) {
 		'use strict';
 
-		key = keyIN;
+		key = keyIn;
 		token = tokenIn;
 
-		if(typeof keyIN !== 'string'){
+		if(typeof keyIn !== 'string'){
 			throw 'key is required and must be a string';
 		}
 
