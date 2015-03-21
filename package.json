@@ -1,0 +1,32 @@
+{
+  "name": "ansble-client",
+  "version": "1.0.0",
+  "description": "client for the data store at ansble.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ansble/ansble-client.git"
+  },
+  "keywords": [
+    "client",
+    "ansble",
+    "rest",
+    "data",
+    "datastore",
+    "db"
+  ],
+  "author": "Daniel Sellers <daniel@designfrontier.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ansble/ansble-client/issues"
+  },
+  "homepage": "https://github.com/ansble/ansble-client",
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "gulp": "^3.8.11",
+    "gulp-mocha": "^2.0.0"
+  }
+}
