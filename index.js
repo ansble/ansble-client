@@ -26,12 +26,30 @@ var http = require('http')
 			options.path = options.path + '/' + idIn;
 		}
 		
-		http.get(options, callback, error); //figure out scope here...
+		http.request(options, callback, error); //figure out scope here...
 	}
-	, save = function (item, callback, errorCallback) {
+	, save = function (itemIn, callbackIn, errorCallbackIn) {
 		'use strict';
 
+		var item = itemIn
+			, callback = callbackIn
+			, error = errorCallbackIn
+			, options = {
+				hostname: 'www.ansble.com',
+				port: 80,
+				path: '/api/' + version + '/' + key,
+				method: 'POST',
+				headers: {
+					'Authorization': token
+				}
+			};
 
+		if(typeof item._id !== 'undefined'){
+			options.path = options.path + '/' + idIn;
+			options.method = 'PUT';
+		}
+		
+		http.request(options, callback, error); //figure out scope here...
 	}
 
 	, setup = function (keyIn, tokenIn) {
