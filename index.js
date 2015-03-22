@@ -16,7 +16,8 @@ var http = require('http')
 				headers: {
 					'Authorization': token
 				}
-			};
+			}
+			, req;
 
 		if(typeof id === 'function'){
 			//getting everything for the app
@@ -26,7 +27,33 @@ var http = require('http')
 			options.path = options.path + '/' + idIn;
 		}
 		
-		http.request(options, callback, error); //figure out scope here...
+		req = http.request(options, function(res){
+			var doc = '';
+
+			res.setEncoding('utf8');
+
+			res.on('data', function(data){
+				doc += data;
+			});
+
+			res.on('end', function() {
+				if(res.statusCode === 200){
+					callback(JSON.parse(doc));
+				} else if(typeof error === 'function'){
+					error(doc);
+				}
+			});
+
+
+		});
+
+		req.on('error', function(e){
+			if(typeof error === 'function') {
+				error(e);
+			}
+		});
+
+		req.end();
 	}
 	, save = function (itemIn, callbackIn, errorCallbackIn) {
 		'use strict';
@@ -52,6 +79,19 @@ var http = require('http')
 		http.request(options, callback, error); //figure out scope here...
 	}
 
+	, destroy = function (idIn, callbackIn) {
+		'use strict';
+
+		callbackIn();
+	}
+
+	, query = function (objectIn) {
+		'use strict';
+		//this is where the map and reduce functions get used
+		//	send with a cool verb like Report
+
+	}
+
 	, setup = function (keyIn, tokenIn) {
 		'use strict';
 
@@ -69,6 +109,7 @@ var http = require('http')
 		return {
 			get: get
 			, save: save
+			, destroy: destroy
 		};
 	};
 
