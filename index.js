@@ -109,7 +109,6 @@ var http = require('http')
 		return {
 			get: get
 			, save: save
-			, destroy: destroy
 		};
 	};
 
