@@ -71,7 +71,7 @@ var http = require('http')
 				}
 			};
 
-		if(typeof item._id !== 'undefined'){
+		if(typeof item._meta !== 'undefined'){
 			options.path = options.path + '/' + item._id;
 			options.method = 'PUT';
 		}
@@ -79,10 +79,19 @@ var http = require('http')
 		http.request(options, callback, error); //figure out scope here...
 	}
 
-	, destroy = function (idIn, callbackIn) {
+	, destroy = function (idIn, callbackIn, errorCallbackIn) {
 		'use strict';
+		var options = {
+				hostname: 'www.ansble.com',
+				port: 80,
+				path: '/api/' + version + '/' + key + '/' + idIn,
+				method: 'DELETE',
+				headers: {
+					'Authorization': token
+				}
+			};
 
-		callbackIn();
+		http.request(options, callbackIn, errorCallbackIn); 
 	}
 
 	, query = function (objectIn) {
@@ -109,6 +118,7 @@ var http = require('http')
 		return {
 			get: get
 			, save: save
+			, destroy: destroy
 		};
 	};
 
