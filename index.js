@@ -43,8 +43,6 @@ var http = require('http')
 					error(doc);
 				}
 			});
-
-
 		});
 
 		req.on('error', function(e){
@@ -69,17 +67,37 @@ var http = require('http')
 				headers: {
 					'Authorization': token
 				}
-			};
+			}
+
+			, req;
 
 		if(typeof item._meta !== 'undefined'){
 			options.path = options.path + '/' + item._id;
 			options.method = 'PUT';
 		}
 		
-		http.request(options, callback, error); //figure out scope here...
+		req = http.request(options, function (res) {
+			var doc = '';
+
+			res.setEncoding('utf8');
+
+			res.on('data', function(data){
+				doc += data;
+			});
+
+			res.on('end', function() {
+				if(res.statusCode === 200){
+					callback(JSON.parse(doc));
+				} else if(typeof error === 'function'){
+					error(doc);
+				}
+			});
+		});
+
+		req.end(JSON.stringify(item));
 	}
 
-	, destroy = function (idIn, callbackIn, errorCallbackIn) {
+	, remove = function (idIn, callbackIn, errorCallbackIn) {
 		'use strict';
 		var options = {
 				hostname: 'www.ansble.com',
@@ -89,9 +107,28 @@ var http = require('http')
 				headers: {
 					'Authorization': token
 				}
-			};
+			}
+			, req;
 
-		http.request(options, callbackIn, errorCallbackIn); 
+		req = http.request(options, function (res) {
+			var doc = '';
+
+			res.setEncoding('utf8');
+
+			res.on('data', function(data){
+				doc += data;
+			});
+
+			res.on('end', function() {
+				if(res.statusCode === 200){
+					callbackIn(JSON.parse(doc));
+				} else if(typeof errorCallbackIn === 'function'){
+					errorCallbackIn(doc);
+				}
+			});
+		});
+
+		req.end();
 	}
 
 	, query = function (objectIn) {
@@ -118,7 +155,7 @@ var http = require('http')
 		return {
 			get: get
 			, save: save
-			, destroy: destroy
+			, remove: remove
 		};
 	};
 
