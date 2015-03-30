@@ -1,6 +1,6 @@
 {
   "name": "ansble-client",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "client for the data store at ansble.com",
   "main": "index.js",
   "scripts": {
