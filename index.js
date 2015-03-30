@@ -1,7 +1,9 @@
 var http = require('http')
 	, version = 'v1'
+	, host
 	, key
 	, token
+	, port
 	, get = function (idIn, callbackIn, errorCallbackIn) {
 		'use strict';
 
@@ -9,8 +11,8 @@ var http = require('http')
 			, callback = callbackIn
 			, error = errorCallbackIn
 			, options = {
-				hostname: 'www.ansble.com',
-				port: 80,
+				hostname: host,
+				port: port,
 				path: '/api/' + version + '/' + key,
 				method: 'GET',
 				headers: {
@@ -60,8 +62,8 @@ var http = require('http')
 			, callback = callbackIn
 			, error = errorCallbackIn
 			, options = {
-				hostname: 'www.ansble.com',
-				port: 80,
+				hostname: host,
+				port: port,
 				path: '/api/' + version + '/' + key,
 				method: 'POST',
 				headers: {
@@ -100,8 +102,8 @@ var http = require('http')
 	, remove = function (idIn, callbackIn, errorCallbackIn) {
 		'use strict';
 		var options = {
-				hostname: 'www.ansble.com',
-				port: 80,
+				hostname: host,
+				port: port,
 				path: '/api/' + version + '/' + key + '/' + idIn,
 				method: 'DELETE',
 				headers: {
@@ -131,15 +133,57 @@ var http = require('http')
 		req.end();
 	}
 
-	, query = function (objectIn) {
+	, query = function (objectIn, callbackIn, errorCallbackIn) {
 		'use strict';
 		//this is where the map and reduce functions get used
 		//	send with a cool verb like Report
 
+		var options = {
+				hostname: host,
+				port: port,
+				path: '/api/' + version + '/' + key,
+				method: 'REPORT',
+				headers: {
+					'Authorization': token
+					, 'content-type': 'text/plain'
+				}
+			}
+			, req;
+
+		if(typeof objectIn === 'object' && Array.isArray(objectIn)){
+			objectIn.forEach(function (item) {
+				item.body = item.body.toString();
+			});
+
+			req = http.request(options, function (res) {
+				var doc = '';
+
+				res.setEncoding('utf8');
+
+				res.on('data', function(data){
+					doc += data;
+				});
+
+				res.on('end', function() {
+					if(res.statusCode === 200){
+						callbackIn(doc);
+						// callbackIn(JSON.parse(doc));
+					} else if(typeof errorCallbackIn === 'function'){
+						errorCallbackIn(doc);
+					}
+				});
+			});
+
+			req.end(JSON.stringify(objectIn));
+		} else {
+			errorCallbackIn();
+		}
+
 	}
 
-	, setup = function (keyIn, tokenIn) {
+	, setup = function (keyIn, tokenIn, hostIn) {
 		'use strict';
+		var portCheck;
 
 		key = keyIn;
 		token = tokenIn;
@@ -152,10 +196,21 @@ var http = require('http')
 			throw 'token is required and must be a string';
 		}
 
+		host = hostIn || 'www.ansble.com';
+		portCheck = host.split(':');
+
+		if(portCheck.length > 1){
+			port = parseInt(portCheck[1], 10);
+			host = portCheck[0];
+		} else {
+			port = 80;
+		}
+
 		return {
 			get: get
 			, save: save
 			, remove: remove
+			, query: query
 		};
 	};
 
