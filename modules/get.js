@@ -1,4 +1,19 @@
-var http = require('http');
+var http = require('http')
+	, getDataFromStub = function (stubs, id) {
+		'use strict';
+
+		var collection;
+
+		if(typeof id !== 'undefined') {
+			collection = stubs.filter(function (item) {
+				return item._id === id;
+			})[0];
+		} else {
+			collection = stubs;
+		}
+
+		return collection;
+	};
 
 module.exports = function (config) {
 	'use strict';
@@ -25,31 +40,36 @@ module.exports = function (config) {
 		} else {
 			options.path = options.path + '/' + idIn;
 		}
-		
-		req = http.request(options, function(res){
-			var doc = '';
 
-			res.setEncoding('utf8');
+		if(typeof config.stubs !== 'undefined'){
+			callback(getDataFromStub(config.stubs, idIn));
+		} else {
+			req = http.request(options, function(res){
+				var doc = '';
 
-			res.on('data', function(data){
-				doc += data;
+				res.setEncoding('utf8');
+
+				res.on('data', function(data){
+					doc += data;
+				});
+
+				res.on('end', function() {
+					if(res.statusCode === 200){
+						callback(JSON.parse(doc));
+					} else if(typeof error === 'function'){
+						error(doc);
+					}
+				});
 			});
 
-			res.on('end', function() {
-				if(res.statusCode === 200){
-					callback(JSON.parse(doc));
-				} else if(typeof error === 'function'){
-					error(doc);
+			req.on('error', function(e){
+				if(typeof error === 'function') {
+					error(e);
 				}
 			});
-		});
 
-		req.on('error', function(e){
-			if(typeof error === 'function') {
-				error(e);
-			}
-		});
-
-		req.end();
+			req.end();
+		}
+		
 	};
 };

@@ -7,7 +7,7 @@ var stubs = {}
 
 	, utils = require('./utils')
 
-	, setup = function (keyIn, tokenIn, hostIn) {
+	, setup = function (keyIn, tokenIn, hostIn, stubsIn) {
 		'use strict';
 		var config = {
 				key: keyIn
@@ -16,12 +16,18 @@ var stubs = {}
 				, version: 'v1'
 			};
 
+		if(Array.isArray(stubsIn) || Array.isArray(hostIn)){
+			stubs = stubsIn || hostIn;
+
+			config.stubs = stubs;
+		}
+
 		if(typeof keyIn !== 'string'){
-			throw 'key is required and must be a string';
+			throw new Error('key is required and must be a string');
 		}
 
 		if(typeof tokenIn !== 'string'){
-			throw 'token is required and must be a string';
+			throw new Error('token is required and must be a string');
 		}
 
 		config.host = utils.getHost(config.host);

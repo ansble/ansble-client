@@ -12,9 +12,9 @@ var getPort = function (hostIn) {
 	, getHost = function (hostIn) {
 		'use strict';
 
-		if(hostIn && hostIn.split(':')) {
+		if(hostIn && typeof hostIn.split !== 'undefined' && hostIn.split(':')) {
 			return hostIn.split(':')[0];
-		} else if(hostIn){
+		} else if(hostIn && typeof hostIn === 'string'){
 			return hostIn;
 		} else {
 			return 'www.ansble.com';
