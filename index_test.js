@@ -1,5 +1,6 @@
 var assert = require('chai').assert
 	, client = require('./index')
+	, httpStub = require('./modules/httpStub')
 	, stubData = require('./test_stubs/data');
 
 describe('ansble client tests', function () {
@@ -40,10 +41,11 @@ describe('ansble client tests', function () {
 	describe('data stub tests', function () {
 
 		it('should return stubs when stubs are passed in', function (done) {
-			var test = client('some-fake-key', 'some-fake-token-for-requests-and-api-usage', stubData);
+			var test = client('some-fake-key', 'some-fake-token-for-requests-and-api-usage', null, httpStub(stubData));
 
 			test.get('test1', function (doc) {
 				assert.isObject(doc);
+				assert.strictEqual(doc._id, 'test1');
 				done();
 			});
 		});

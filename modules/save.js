@@ -1,7 +1,6 @@
-var http = require('http');
-
 module.exports = function (config) {
 	'use strict';
+	var http = config.http;
 
 	return function (itemIn, callbackIn, errorCallbackIn) {
 		var item = itemIn

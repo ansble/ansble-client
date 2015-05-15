@@ -1,4 +1,4 @@
-var stubs = {}
+var http = require('http')
 
 	, get = require('./modules/get')
 	, save = require('./modules/save')
@@ -7,19 +7,18 @@ var stubs = {}
 
 	, utils = require('./utils')
 
-	, setup = function (keyIn, tokenIn, hostIn, stubsIn) {
+	, setup = function (keyIn, tokenIn, hostIn, httpIn) {
 		'use strict';
 		var config = {
 				key: keyIn
 				, token: tokenIn
 				, host: hostIn
 				, version: 'v1'
+				, http: http
 			};
 
-		if(Array.isArray(stubsIn) || Array.isArray(hostIn)){
-			stubs = stubsIn || hostIn;
-
-			config.stubs = stubs;
+		if(typeof httpIn !== 'undefined'){
+			config.http = httpIn;
 		}
 
 		if(typeof keyIn !== 'string'){

@@ -1,5 +1,4 @@
-var http = require('http')
-	, getDataFromStub = function (stubs, id) {
+var getDataFromStub = function (stubs, id) {
 		'use strict';
 
 		var collection;
@@ -17,6 +16,7 @@ var http = require('http')
 
 module.exports = function (config) {
 	'use strict';
+	var http = config.http;
 
 	return function (idIn, callbackIn, errorCallbackIn) {
 		var id = idIn
@@ -41,35 +41,32 @@ module.exports = function (config) {
 			options.path = options.path + '/' + idIn;
 		}
 
-		if(typeof config.stubs !== 'undefined'){
-			callback(getDataFromStub(config.stubs, idIn));
-		} else {
-			req = http.request(options, function(res){
-				var doc = '';
+		req = http.request(options, function(res){
+			var doc = '';
 
-				res.setEncoding('utf8');
+			res.setEncoding('utf8');
 
-				res.on('data', function(data){
-					doc += data;
-				});
-
-				res.on('end', function() {
-					if(res.statusCode === 200){
-						callback(JSON.parse(doc));
-					} else if(typeof error === 'function'){
-						error(doc);
-					}
-				});
+			res.on('data', function(data){
+				doc += data;
 			});
 
-			req.on('error', function(e){
-				if(typeof error === 'function') {
-					error(e);
+			res.on('end', function() {				
+				if(res.statusCode === 200){					
+					callback(JSON.parse(doc));
+				} else if(typeof error === 'function'){
+					error(doc);
 				}
-			});
 
-			req.end();
-		}
-		
+				doc = '';
+			});
+		});
+
+		req.on('error', function(e){
+			if(typeof error === 'function') {
+				error(e);
+			}
+		});
+
+		req.end();		
 	};
 };
