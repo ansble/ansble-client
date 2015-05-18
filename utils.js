@@ -14,8 +14,6 @@ var getPort = function (hostIn) {
 
 		if(hostIn && typeof hostIn.split !== 'undefined' && hostIn.split(':')) {
 			return hostIn.split(':')[0];
-		} else if(hostIn && typeof hostIn === 'string'){
-			return hostIn;
 		} else {
 			return 'www.ansble.com';
 		}

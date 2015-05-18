@@ -1,19 +1,3 @@
-var getDataFromStub = function (stubs, id) {
-		'use strict';
-
-		var collection;
-
-		if(typeof id !== 'undefined') {
-			collection = stubs.filter(function (item) {
-				return item._id === id;
-			})[0];
-		} else {
-			collection = stubs;
-		}
-
-		return collection;
-	};
-
 module.exports = function (config) {
 	'use strict';
 	var http = config.http;

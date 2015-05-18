@@ -14,6 +14,13 @@ module.exports = function (stubsIn) {
 					return item._id === id[1];
 				})[0]);
 			}
+		}
+
+		, appendOptions = function (dataIn, optionsIn) {
+			dataIn = JSON.parse(dataIn);
+			dataIn.httpOptions = optionsIn;
+
+			return JSON.stringify(dataIn);
 		};
 
 
@@ -28,8 +35,27 @@ module.exports = function (stubsIn) {
 
 			resObj.statusCode = 200;
 
-			reqObj.end = function () {			
-				resObj.emit('data', getStubData(options.path));
+			reqObj.end = function (dataIn) {
+				var data;
+
+				if(options.method.toLowerCase() === 'put' || options.method.toLowerCase() === 'post'){
+					data = JSON.parse(dataIn);
+
+					if(typeof data._id === 'undefined'){
+						data._id = 'some-random-string';
+					}
+					
+					if(!options.path.match(new RegExp('/' + data._id))){
+						options.path += '/' + data._id;
+					}
+					
+
+					stubsIn.push(data);
+
+					resObj.emit('data', appendOptions(getStubData(options.path), options));
+				} else {
+					resObj.emit('data', appendOptions(getStubData(options.path), options));
+				}
 				resObj.emit('end');
 				return true;
 			};
