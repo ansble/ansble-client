@@ -22,18 +22,21 @@ describe('remove module tests', function () {
 		assert.isFunction(remove(configStub));
 	});
 
-	// it('should return an object when an ID is passed in', function (done) {
-	// 	remove(configStub)('test1', function (doc) {
-	// 		assert.isObject(doc);
-	// 		assert.strictEqual(doc._id, 'test1');
-	// 		done();
-	// 	});
-	// });	
+	it('should remove a doc and return true when a valid ID is passed in', function (done) {
+		remove(configStub)('test1', function (doc) {
 
-	// it('should return an array when no ID is passed in', function (done) {
-	// 	remove(configStub)(function (docs) {
-	// 		assert.isArray(docs);
-	// 		done();
-	// 	});
-	// });	
+			assert.isObject(doc);
+			assert.strictEqual(doc.success, true);
+			done();
+		});
+	});
+
+	it('should not remove a doc and return false when an invalid ID is passed in', function (done) {
+		remove(configStub)('test', function (doc) {
+			
+			assert.isObject(doc);
+			assert.strictEqual(doc.success, false);
+			done();
+		});
+	});
 });

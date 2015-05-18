@@ -53,9 +53,14 @@ module.exports = function (stubsIn) {
 					stubsIn.push(data);
 
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
+				} else if(options.method.toLowerCase() === 'delete') {
+					data = getStubData(options.path);
+
+					resObj.emit('data', JSON.stringify({success: (typeof data !== 'undefined')}));
 				} else {
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
 				}
+
 				resObj.emit('end');
 				return true;
 			};
