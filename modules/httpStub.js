@@ -16,10 +16,23 @@ module.exports = function (stubsIn) {
 			}
 		}
 
+		, removeItem = function (path) {
+			var id = path.split('v1')[1].split('/').splice(1)[1]
+				, success = false;
+
+			stubsIn.forEach(function (item, index) {
+				if(item._id === id){
+					stubsIn.splice(index, 1);
+					success = true;
+				}
+			});
+
+			return JSON.stringify({success: success});
+		}
+
 		, appendOptions = function (dataIn, optionsIn) {
 			dataIn = JSON.parse(dataIn);
 			dataIn.httpOptions = optionsIn;
-
 			return JSON.stringify(dataIn);
 		};
 
@@ -54,9 +67,7 @@ module.exports = function (stubsIn) {
 
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
 				} else if(options.method.toLowerCase() === 'delete') {
-					data = getStubData(options.path);
-
-					resObj.emit('data', JSON.stringify({success: (typeof data !== 'undefined')}));
+					resObj.emit('data', removeItem(options.path));
 				} else {
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
 				}
