@@ -146,3 +146,10 @@ This ends up being essentially:
 		});
 ```
 and the return is the result of this execution. I won't dig into this in more depth here... but if you aren't sure how to use something like this then check out [Array.prototype.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [Array.prototype.reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) and [Array.prototype.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter). Only `filter`, `map`, and `reduce` functions are allowed at this point.
+
+## Offline and local development
+
+Coming soon...
+
+## Tests
+There are a bunch of tests that allow you to see how things work.
