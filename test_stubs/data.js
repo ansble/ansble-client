@@ -28,7 +28,6 @@ module.exports = [
 			'these'
 			, 'are'
 			, 'tags'
-			, 'security'
 		]
 		, content: 'This is some content'
 	}
@@ -38,7 +37,6 @@ module.exports = [
 		, tags: [
 			'these'
 			, 'are'
-			, 'tags'
 			, 'security'
 		]
 		, content: 'This is some content'
@@ -49,7 +47,6 @@ module.exports = [
 		, tags: [
 			'these'
 			, 'are'
-			, 'tags'
 			, 'security'
 		]
 		, content: 'This is some content'

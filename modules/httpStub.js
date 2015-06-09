@@ -1,4 +1,6 @@
 
+var sandbox = require('sandbox');
+
 module.exports = function (stubsIn) {
 	'use strict';
 	var events = require('events')
@@ -49,7 +51,10 @@ module.exports = function (stubsIn) {
 			resObj.statusCode = 200;
 
 			reqObj.end = function (dataIn) {
-				var data;
+				var data
+					, rtn
+					, s
+					, execString;
 
 				if(options.method.toLowerCase() === 'put' || options.method.toLowerCase() === 'post'){
 					data = JSON.parse(dataIn);
@@ -66,13 +71,32 @@ module.exports = function (stubsIn) {
 					stubsIn.push(data);
 
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
+					resObj.emit('end');
 				} else if(options.method.toLowerCase() === 'delete') {
 					resObj.emit('data', removeItem(options.path));
+					resObj.emit('end');
+				} else if(options.method.toLowerCase() === 'report') {
+					data = JSON.parse(dataIn);
+
+					s = new sandbox();
+					execString = 'data';
+
+					data.forEach(function (item) {
+						if(item.type === 'filter' || item.type === 'map' || item.type === 'reduce'){
+							execString += '.' + item.type + '(' + item.body + ')';
+						}
+					});
+
+					s.run('data = ' + JSON.stringify(stubsIn) + '; result = JSON.stringify(' + execString + ');', function (output) {
+						resObj.emit('data', output.result);
+						resObj.emit('end');
+					});
+					
 				} else {
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
+					resObj.emit('end');
 				}
 
-				resObj.emit('end');
 				return true;
 			};
 

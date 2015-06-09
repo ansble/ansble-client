@@ -22,18 +22,29 @@ describe('query module tests', function () {
 		assert.isFunction(query(configStub));
 	});
 
-	// it('should return an object when an ID is passed in', function (done) {
-	// 	query(configStub)('test1', function (doc) {
-	// 		assert.isObject(doc);
-	// 		assert.strictEqual(doc._id, 'test1');
-	// 		done();
-	// 	});
-	// });	
+	it('should execute a filter function if a filter function is passed in', function (done) {
+		var filter = function (item) {
+			return item.tags.indexOf('security') > -1;
+		};
 
-	// it('should return an array when no ID is passed in', function (done) {
-	// 	query(configStub)(function (docs) {
-	// 		assert.isArray(docs);
-	// 		done();
-	// 	});
-	// });	
+		query(configStub)([{
+			type: 'filter'
+			, body: filter.toString()
+		}], function (doc) {
+			assert.isArray(doc);
+			assert.lengthOf(doc, 4);
+			done();
+		});
+	});	
+
+	it('should execute the erroCallBack if something other then an array is passed in', function (done) {
+		query(configStub)({}, function (docs) {
+			
+		}, function (err) {
+			assert.strictEqual(true, true);
+			done();
+		});
+	});	
+
+	it('should execute the erroCallBack if a non 200 level response status');	
 });

@@ -34,8 +34,7 @@ module.exports = function (config) {
 
 				res.on('end', function() {
 					if(res.statusCode === 200){
-						callbackIn(doc);
-						// callbackIn(JSON.parse(doc));
+						callbackIn(JSON.parse(doc.replace(/(^')|('$)/g, '')));
 					} else if(typeof errorCallbackIn === 'function'){
 						errorCallbackIn(doc);
 					}
