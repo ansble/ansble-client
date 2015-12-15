@@ -6,9 +6,9 @@ module.exports = function (stubsIn) {
 	var events = require('events')
 
 		, getStubData = function (path) {
-			var id = path.split('v1')[1].split('/').splice(1);
+			var id = path.split('/').splice(1);
 
-			
+
 			if(id.length === 1){
 				return JSON.stringify(stubsIn);
 			} else {
@@ -19,7 +19,7 @@ module.exports = function (stubsIn) {
 		}
 
 		, removeItem = function (path) {
-			var id = path.split('v1')[1].split('/').splice(1)[1]
+			var id = path.split('/').splice(1)[1]
 				, success = false;
 
 			stubsIn.forEach(function (item, index) {
@@ -37,7 +37,6 @@ module.exports = function (stubsIn) {
 			dataIn.httpOptions = optionsIn;
 			return JSON.stringify(dataIn);
 		};
-
 
 	return {
 		request: function (options, callback) {
@@ -62,11 +61,11 @@ module.exports = function (stubsIn) {
 					if(typeof data._id === 'undefined'){
 						data._id = 'some-random-string';
 					}
-					
+
 					if(!options.path.match(new RegExp('/' + data._id))){
 						options.path += '/' + data._id;
 					}
-					
+
 
 					stubsIn.push(data);
 
@@ -91,7 +90,7 @@ module.exports = function (stubsIn) {
 						resObj.emit('data', output.result);
 						resObj.emit('end');
 					});
-					
+
 				} else {
 					resObj.emit('data', appendOptions(getStubData(options.path), options));
 					resObj.emit('end');

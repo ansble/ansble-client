@@ -9,7 +9,7 @@ module.exports = function (config) {
 			, options = {
 				hostname: config.host,
 				port: config.port,
-				path: '/api/' + config.version + '/' + config.key,
+				path: '/' + config.key,
 				method: 'POST',
 				headers: {
 					'Authorization': config.token
@@ -22,7 +22,7 @@ module.exports = function (config) {
 			options.path = options.path + '/' + item._id;
 			options.method = 'PUT';
 		}
-		
+
 		req = http.request(options, function (res) {
 			var doc = '';
 

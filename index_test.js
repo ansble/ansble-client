@@ -49,7 +49,49 @@ describe('ansble client tests', function () {
 				done();
 			});
 		});
+	});
 
+	describe('exposed stubbing for use in client tests', function () {
+		it('should have an httpStub function available', function () {
+			var testClient = client('some-fake-key', 'some-fake-token-for-requests-and-api-usage');
 
+			assert.isFunction(testClient.httpStub);
+		});
+
+		it('should replace a real http with the stubbed one when executed', function (done) {
+			var stubData = [
+					{
+						_id: 'test1'
+						, title: 'This is a title'
+						, tags: [
+							'these'
+							, 'are'
+							, 'tags'
+							, 'security'
+						]
+						, content: 'This is some content'
+					}
+					, {
+						_id: 'test2'
+						, title: 'This is a title'
+						, tags: [
+							'these'
+							, 'are'
+							, 'tags'
+							, 'security'
+						]
+						, content: 'This is some content'
+					}
+				]
+				, testClient = client('some-fake-key', 'some-fake-token-for-requests-and-api-usage');
+
+			testClient.httpStub(stubData);
+
+			testClient.get('test1', function (doc) {
+				assert.isObject(doc);
+				assert.strictEqual(doc._id, 'test1');
+				done();
+			});
+		});
 	});
 });

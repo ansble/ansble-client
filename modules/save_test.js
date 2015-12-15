@@ -45,7 +45,7 @@ describe('save module tests', function () {
 			assert.isObject(doc);
 			assert.isDefined(doc.httpOptions.method);
 			assert.strictEqual(doc.httpOptions.method, 'PUT');
-			assert.strictEqual(doc.httpOptions.path, '/api/v1/keyIn/test');
+			assert.strictEqual(doc.httpOptions.path, '/keyIn/test');
 			done();
 		});
 	});
@@ -57,5 +57,5 @@ describe('save module tests', function () {
 			assert.strictEqual(doc.name, 'daniel');
 			done();
 		});
-	});	
+	});
 });

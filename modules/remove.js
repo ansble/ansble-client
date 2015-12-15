@@ -6,7 +6,7 @@ module.exports = function (config) {
 		var options = {
 				hostname: config.host,
 				port: config.port,
-				path: '/api/' + config.version + '/' + config.key + '/' + idIn,
+				path: '/' + config.key + '/' + idIn,
 				method: 'DELETE',
 				headers: {
 					'Authorization': config.token

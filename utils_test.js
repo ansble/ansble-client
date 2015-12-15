@@ -24,13 +24,13 @@ describe('Utils Tests', function () {
 		});
 
 		it('should return the ansble.com if no host is passed in', function () {
-			assert.strictEqual(utils.getHost(), 'www.ansble.com');
+			assert.strictEqual(utils.getHost(), 'v1.ansble.com');
 		});
 
 		it('should return the ansble.com if something other then a string is passed in', function () {
-			assert.strictEqual(utils.getHost(['this', 'is', 'an', 'array']), 'www.ansble.com');
+			assert.strictEqual(utils.getHost(['this', 'is', 'an', 'array']), 'v1.ansble.com');
 		});
-		
+
 		it('should return the host if a host is passed in', function () {
 			assert.strictEqual(utils.getHost('www.google.com'), 'www.google.com');
 		});

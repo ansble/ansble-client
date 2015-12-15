@@ -9,7 +9,7 @@ module.exports = function (config) {
 		var options = {
 				hostname: config.host,
 				port: config.port,
-				path: '/api/' + config.version + '/' + config.key,
+				path: '/' + config.key,
 				method: 'REPORT',
 				headers: {
 					'Authorization': config.token

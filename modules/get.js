@@ -9,7 +9,7 @@ module.exports = function (config) {
 			, options = {
 				hostname: config.host,
 				port: config.port,
-				path: '/api/' + config.version + '/' + config.key,
+				path: '/' + config.key,
 				method: 'GET',
 				headers: {
 					'Authorization': config.token
@@ -25,6 +25,8 @@ module.exports = function (config) {
 			options.path = options.path + '/' + idIn;
 		}
 
+        console.log(options);
+
 		req = http.request(options, function(res){
 			var doc = '';
 
@@ -34,8 +36,8 @@ module.exports = function (config) {
 				doc += data;
 			});
 
-			res.on('end', function() {				
-				if(res.statusCode === 200){					
+			res.on('end', function() {
+				if(res.statusCode === 200){
 					callback(JSON.parse(doc));
 				} else if(typeof error === 'function'){
 					error(doc);
@@ -51,6 +53,6 @@ module.exports = function (config) {
 			}
 		});
 
-		req.end();		
+		req.end();
 	};
 };

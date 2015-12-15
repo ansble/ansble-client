@@ -12,7 +12,7 @@ describe('http stub tests', function () {
 
 	it('the stub request funciton should trigger the call back passing it a response stub', function (done) {
 
-		var req = httpStub({}).request({}, function (res){			
+		var req = httpStub({}).request({}, function (res){
 			assert.isFunction(res.setEncoding);
 			assert.isFunction(res.on);
 			assert.strictEqual(res.statusCode, 200);
@@ -23,7 +23,7 @@ describe('http stub tests', function () {
 	it('request should return a request stub', function () {
 
 		var req = httpStub({}).request({}, function (res){});
-		
+
 		assert.isFunction(req.on);
 		assert.isFunction(req.end);
 	});
@@ -43,7 +43,7 @@ describe('http stub tests', function () {
 			, req2
 			, req1 = http.request({
 				method: 'DELETE'
-				, path: '/api/v1/keyIn/test1'
+				, path: '/keyIn/test1'
 			}, function (res){
 				var doc = '';
 
@@ -60,9 +60,9 @@ describe('http stub tests', function () {
 
 					req2 = http.request({ hostname: undefined,
 					    port: undefined,
-					    path: '/api/v1/keyIn',
+					    path: '/keyIn',
 					    method: 'GET',
-					    headers: { Authorization: 'tokenIn' } 
+					    headers: { Authorization: 'tokenIn' }
 					}, function (res2){
 						var doc2 = '';
 
@@ -78,9 +78,9 @@ describe('http stub tests', function () {
 							assert.strictEqual(doc2.length, 1);
 							done();
 						});
-						
+
 					});
-					
+
 					req2.end();
 				});
 			});
